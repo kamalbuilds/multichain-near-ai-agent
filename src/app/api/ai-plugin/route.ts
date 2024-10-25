@@ -654,6 +654,119 @@ export async function GET() {
                         }
                     }
                 }
+            },
+            "/api/tools/buildeth": {
+                get: {
+                    summary: "Build and execute Ethereum transaction",
+                    description: "Create and execute an Ethereum transaction",
+                    operationId: "buildeth",
+                    parameters: [
+                        {
+                            name: "sender",
+                            in: "query",
+                            required: true,
+                            schema: {
+                                type: "string"
+                            },
+                            description: "Sender's Ethereum address"
+                        },
+                        {
+                            name: "receiver",
+                            in: "query",
+                            required: true,
+                            schema: {
+                                type: "string"
+                            },
+                            description: "Receiver's Ethereum address"
+                        },
+                        {
+                            name: "amount",
+                            in: "query",
+                            required: true,
+                            schema: {
+                                type: "string"
+                            },
+                            description: "Amount of Ether to send"
+                        },
+                        {
+                            name: "data",
+                            in: "query",
+                            required: false,
+                            schema: {
+                                type: "string"
+                            },
+                            description: "Additional data for the transaction (optional)"
+                        },
+                        {
+                            name: "accountId",
+                            in: "query",
+                            required: true,
+                            schema: {
+                                type: "string"
+                            },
+                            description: "NEAR account ID"
+                        },
+                        {
+                            name: "path",
+                            in: "query",
+                            required: false,
+                            schema: {
+                                type: "string"
+                            },
+                            description: "Derivation path (optional)"
+                        }
+                    ],
+                    responses: {
+                        "200": {
+                            description: "Successful response",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            txHash: {
+                                                type: "string",
+                                                description: "Transaction hash of the executed Ethereum transaction"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            description: "Bad request",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            description: "Internal server error",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
     };
