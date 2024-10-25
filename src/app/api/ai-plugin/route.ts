@@ -8,7 +8,7 @@ if (!key?.accountId) {
     console.error("no account");
 }
 
-const serverUrl = config.url || "http://localhost:3000";
+const serverUrl = config.url || "https://near-ai-agent.vercel.app";
 
 export async function GET() {
     const pluginData = {
@@ -557,6 +557,104 @@ export async function GET() {
                     }
                 }
             },
+            "/api/tools/buildbitcointxn": {
+                get: {
+                    operationId: "buildBitcoinTransaction",
+                    summary: "Build a Bitcoin transaction",
+                    description: "Creates a Bitcoin transaction payload based on the provided parameters.",
+                    parameters: [
+                        {
+                            name: "path",
+                            in: "query",
+                            description: "Derivation path for the Bitcoin address",
+                            required: true,
+                            schema: {
+                                type: "string"
+                            }
+                        },
+                        {
+                            name: "to",
+                            in: "query",
+                            description: "Recipient Bitcoin address",
+                            required: true,
+                            schema: {
+                                type: "string"
+                            }
+                        },
+                        {
+                            name: "amount",
+                            in: "query",
+                            description: "Amount of Bitcoin to send (in BTC)",
+                            required: true,
+                            schema: {
+                                type: "string"
+                            }
+                        }
+                    ],
+                    responses: {
+                        "200": {
+                            description: "Successful response",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            fromAddress: {
+                                                type: "string",
+                                                description: "Sender's Bitcoin address"
+                                            },
+                                            to: {
+                                                type: "string",
+                                                description: "Recipient's Bitcoin address"
+                                            },
+                                            amount: {
+                                                type: "string",
+                                                description: "Amount of Bitcoin to send (in BTC)"
+                                            },
+                                            txPayload: {
+                                                type: "object",
+                                                description: "Bitcoin transaction payload"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            description: "Bad request",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            description: "Internal server error",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         },
     };
 

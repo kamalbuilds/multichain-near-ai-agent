@@ -1,7 +1,7 @@
 import { Web3 } from "web3"
 import { bytesToHex } from '@ethereumjs/util';
 import { FeeMarketEIP1559Transaction } from '@ethereumjs/tx';
-import { deriveChildPublicKey, najPublicKeyStrToUncompressedHexPoint, uncompressedHexPointToEvmAddress } from '../services/kdf';
+import { deriveChildPublicKey, najPublicKeyStrToUncompressedHexPoint, uncompressedHexPointToEvmAddress } from '../utils/kdf';
 import { Common } from '@ethereumjs/common'
 import { Contract, JsonRpcProvider } from "ethers";
 import { parseNearAmount } from "near-api-js/lib/utils/format";

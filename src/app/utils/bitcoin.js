@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as ethers from 'ethers';
 import * as bitcoin from "bitcoinjs-lib";
-import { deriveChildPublicKey, najPublicKeyStrToUncompressedHexPoint, uncompressedHexPointToBtcAddress } from '../services/kdf';
+import { deriveChildPublicKey, najPublicKeyStrToUncompressedHexPoint, uncompressedHexPointToBtcAddress } from '../utils/kdf';
 import { parseNearAmount } from "near-api-js/lib/utils/format";
 
 export class Bitcoin {
@@ -74,7 +74,7 @@ export class Bitcoin {
         value: change,
       });
     } else {
-      alert(`Not enough funds to cover the transaction and fee. Missing ${-change} satoshis`);
+      console.log(`Not enough funds to cover the transaction and fee. Missing ${-change} satoshis`);
     }
 
     return { psbt, utxos };

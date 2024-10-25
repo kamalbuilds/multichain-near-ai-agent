@@ -21,7 +21,15 @@
     "keccak": "^3.0.4",
     "near-api-js": "^4.0.4",
     "near-seed-phrase": "^0.2.1",
-    "noble-hashes": "^0.3.1"
+    "noble-hashes": "^0.3.1",
+    "@near-wallet-selector/core": "^8.9.13",
+    "@near-wallet-selector/here-wallet": "^8.9.13",
+    "@near-wallet-selector/meteor-wallet": "^8.9.13",
+    "@near-wallet-selector/modal-ui": "^8.9.13",
+    "@near-wallet-selector/my-near-wallet": "^8.9.13",
+    "@near-wallet-selector/bitte-wallet": "^8.9.13",
+    "rxjs": "^7.8.1",
+    "viem": "^2.18.4"
   },
   "devDependencies": {
     "@types/node": "^20",
