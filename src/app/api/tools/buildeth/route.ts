@@ -3,8 +3,9 @@ import { Ethereum } from '../../../utils/ethereum';
 import { Wallet } from '../../../utils/near-wallet';
 import { deriveChildPublicKey, najPublicKeyStrToUncompressedHexPoint, uncompressedHexPointToEvmAddress } from '../../../utils/kdf';
 
-const ethereum = new Ethereum('https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID', 'sepolia');
-const wallet = new Wallet({ networkId: 'testnet', createAccessKeyFor: process.env.CONTRACT_NAME! });
+const ethereum = new Ethereum(process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL || '', 'sepolia');
+const MPC_CONTRACT_ID = 'v1.signer-prod.testnet';
+const wallet = new Wallet({ networkId: 'testnet', createAccessKeyFor: MPC_CONTRACT_ID });
 
 export async function GET(request: Request) {
   try {
@@ -16,6 +17,7 @@ export async function GET(request: Request) {
     const accountId = searchParams.get('accountId');
     const path = searchParams.get('path') || '';
 
+    console.log(sender , receiver , amount , accountId , path , "from buildeth req")
     if (!sender || !receiver || !amount || !accountId) {
       return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
     }
@@ -23,6 +25,7 @@ export async function GET(request: Request) {
     // Derive Ethereum address
     const { address: derivedAddress } = await ethereum.deriveAddress(accountId, path);
 
+    console.log(derivedAddress.toLowerCase() , sender.toLowerCase() , "compare")
     if (derivedAddress.toLowerCase() !== sender.toLowerCase()) {
       return NextResponse.json({ error: 'Derived address does not match sender' }, { status: 400 });
     }
@@ -31,7 +34,7 @@ export async function GET(request: Request) {
     const { payload } = await ethereum.createPayload(sender, receiver, amount, data);
 
     // Request signature from MPC
-    const { big_r, s, recovery_id } = await ethereum.requestSignatureToMPC(wallet, process.env.CONTRACT_NAME!, path, payload);
+    const { big_r, s, recovery_id } = await ethereum.requestSignatureToMPC(wallet, MPC_CONTRACT_ID, path, payload);
 
     // Reconstruct and verify signature
     const signedTransaction = await ethereum.reconstructSignatureFromLocalSession(big_r, s, recovery_id, sender);
