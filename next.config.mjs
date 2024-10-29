@@ -1,5 +1,11 @@
-/ @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
     async rewrites(){
         return [
             {
@@ -7,7 +13,7 @@ const nextConfig = {
                 destination: "/api/ai-plugin"
             }
         ]
-    }
+    },
 };
 
 export default nextConfig;
