@@ -10,7 +10,7 @@ const nextConfig = {
         return [
             {
                 source: "/.well-known/ai-plugin.json",
-                destination: "/api/ai-plugin"
+                destination: "/api/ai-plugin",
             }
         ]
     },

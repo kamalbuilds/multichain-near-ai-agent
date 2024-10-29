@@ -8,7 +8,7 @@ if (!key?.accountId) {
     console.error("no account");
 }
 
-const serverUrl = config.url || "https://near-ai-agent.vercel.app";
+const serverUrl = config.url || "http://localhost:3000";
 
 export async function GET() {
     const pluginData = {
@@ -82,76 +82,6 @@ export async function GET() {
                         },
                     },
                 },
-            },
-            "/api/tools/reddit": {
-                get: {
-                    summary: "get Reddit frontpage posts",
-                    description: "Fetch and return a list of posts from the Reddit frontpage",
-                    operationId: "get-reddit-posts",
-                    responses: {
-                        "200": {
-                            description: "Successful response",
-                            content: {
-                                "application/json": {
-                                    schema: {
-                                        type: "object",
-                                        properties: {
-                                            posts: {
-                                                type: "array",
-                                                items: {
-                                                    type: "object",
-                                                    properties: {
-                                                        title: {
-                                                            type: "string",
-                                                            description: "The title of the post"
-                                                        },
-                                                        author: {
-                                                            type: "string",
-                                                            description: "The username of the post author"
-                                                        },
-                                                        subreddit: {
-                                                            type: "string",
-                                                            description: "The subreddit where the post was made"
-                                                        },
-                                                        score: {
-                                                            type: "number",
-                                                            description: "The score (upvotes) of the post"
-                                                        },
-                                                        num_comments: {
-                                                            type: "number",
-                                                            description: "The number of comments on the post"
-                                                        },
-                                                        url: {
-                                                            type: "string",
-                                                            description: "The URL of the post on Reddit"
-                                                        }
-                                                    }
-                                                },
-                                                description: "An array of Reddit posts"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "500": {
-                            description: "Error response",
-                            content: {
-                                "application/json": {
-                                    schema: {
-                                        type: "object",
-                                        properties: {
-                                            error: {
-                                                type: "string",
-                                                description: "Error message"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             },
             "/api/tools/twitter": {
                 get: {
@@ -393,112 +323,20 @@ export async function GET() {
                     }
                 }
             },
-            "/api/tools/execbitcointxn": {
-                post: {
-                    summary: "Execute Bitcoin transaction",
-                    description: "Create and execute a Bitcoin transaction",
-                    operationId: "execBitcoinTxn",
-                    requestBody: {
-                        required: true,
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    required: ["path", "to", "amount"],
-                                    properties: {
-                                        path: {
-                                            type: "string",
-                                            description: "Derivation path for the Bitcoin address"
-                                        },
-                                        to: {
-                                            type: "string",
-                                            description: "Recipient's Bitcoin address"
-                                        },
-                                        amount: {
-                                            type: "string",
-                                            description: "Amount of Bitcoin to send (in BTC)"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    responses: {
-                        "200": {
-                            description: "Successful response",
-                            content: {
-                                "application/json": {
-                                    schema: {
-                                        type: "object",
-                                        properties: {
-                                            txHash: {
-                                                type: "string",
-                                                description: "Transaction hash"
-                                            },
-                                            derivedAddress: {
-                                                type: "string",
-                                                description: "Derived Bitcoin address"
-                                            },
-                                            balance: {
-                                                type: "string",
-                                                description: "Balance of the derived address (in BTC)"
-                                            },
-                                            tx: {
-                                                type: "object",
-                                                description: "Transaction details"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "400": {
-                            description: "Bad request",
-                            content: {
-                                "application/json": {
-                                    schema: {
-                                        type: "object",
-                                        properties: {
-                                            error: {
-                                                type: "string",
-                                                description: "Error message"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "500": {
-                            description: "Internal server error",
-                            content: {
-                                "application/json": {
-                                    schema: {
-                                        type: "object",
-                                        properties: {
-                                            error: {
-                                                type: "string",
-                                                description: "Error message"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
+            "/api/tools/derivebitcointxn": {
                 get: {
-                    summary: "Get Bitcoin address and balance",
-                    description: "Derive a Bitcoin address from a path and get its balance",
-                    operationId: "getBitcoinAddressAndBalance",
+                    operationId: "deriveBitcoinTransaction",
+                    summary: "Derive Bitcoin address and get balance",
+                    description: "Derives a Bitcoin address from a path and returns the address with its balance",
                     parameters: [
                         {
                             name: "path",
                             in: "query",
+                            description: "Derivation path for the Bitcoin address",
                             required: true,
                             schema: {
                                 type: "string"
-                            },
-                            description: "Derivation path for the Bitcoin address"
+                            }
                         }
                     ],
                     responses: {
@@ -511,11 +349,11 @@ export async function GET() {
                                         properties: {
                                             derivedAddress: {
                                                 type: "string",
-                                                description: "Derived Bitcoin address"
+                                                description: "The derived Bitcoin address"
                                             },
                                             balance: {
-                                                type: "string",
-                                                description: "Balance of the derived address (in BTC)"
+                                                type: "number",
+                                                description: "Balance of the derived address in BTC"
                                             }
                                         }
                                     }
@@ -646,6 +484,176 @@ export async function GET() {
                                             error: {
                                                 type: "string",
                                                 description: "Error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/tools/signbitcointxn": {
+                post: {
+                    summary: "Sign a Bitcoin transaction",
+                    description: "Sign a Bitcoin transaction using MPC through NEAR wallet",
+                    operationId: "signbitcointxn",
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    required: ["path", "unsignedTx", "publicKey"],
+                                    properties: {
+                                        path: {
+                                            type: "string", 
+                                            description: "Derivation path for the Bitcoin address"
+                                        },
+                                        unsignedTx: {
+                                            type: "string",
+                                            description: "Unsigned Bitcoin transaction hex"
+                                        },
+                                        publicKey: {
+                                            type: "string",
+                                            description: "Public key in hex format"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    responses: {
+                        "200": {
+                            description: "Successfully signed transaction",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            success: {
+                                                type: "boolean",
+                                                description: "Indicates if signing was successful"
+                                            },
+                                            signedTransaction: {
+                                                type: "string",
+                                                description: "Signed transaction hex"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            description: "Bad request",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            description: "Internal server error",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            },
+                                            details: {
+                                                type: "string",
+                                                description: "Detailed error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/tools/deriveethtxn": {
+                get: {
+                    summary: "Derive Ethereum address and get balance",
+                    description: "Derives an Ethereum address from a path and returns its balance",
+                    operationId: "deriveethtxn",
+                    parameters: [
+                        {
+                            name: "path",
+                            in: "query", 
+                            required: true,
+                            schema: {
+                                type: "string"
+                            },
+                            description: "Derivation path for the Ethereum address"
+                        }
+                    ],
+                    responses: {
+                        "200": {
+                            description: "Successful response",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            derivedAddress: {
+                                                type: "string",
+                                                description: "The derived Ethereum address"
+                                            },
+                                            publicKey: {
+                                                type: "string",
+                                                description: "The public key in hex format"
+                                            },
+                                            balance: {
+                                                type: "string",
+                                                description: "Balance in ETH"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            description: "Bad request",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            description: "Internal server error",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            error: {
+                                                type: "string",
+                                                description: "Error message"
+                                            },
+                                            details: {
+                                                type: "string",
+                                                description: "Detailed error message"
                                             }
                                         }
                                     }
