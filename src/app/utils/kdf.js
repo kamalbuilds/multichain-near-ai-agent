@@ -1,6 +1,6 @@
 import { base_decode } from 'near-api-js/lib/utils/serialize';
 import { ec as EC } from 'elliptic';
-import { keccak256 } from "keccak";
+import { keccak256 } from "viem";
 import hash from 'hash.js';
 import bs58check from 'bs58check';
 import { sha3_256 } from 'js-sha3'
