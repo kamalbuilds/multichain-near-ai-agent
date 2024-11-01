@@ -29,6 +29,77 @@ The **MultiChain AI Agent on NEAR** leverages AI for seamless blockchain interop
 
 With the growing demand for multi-chain solutions and simplified blockchain interactions, this project offers a comprehensive tool for both everyday users and DeFi enthusiasts.
 
+### Flow 
+
+```mermaid
+
+graph TB
+    subgraph "User Interface"
+        UI[User Interface]
+        AI[Bitte AI Agent]
+    end
+
+    subgraph "API Layer"
+        DeriveETH[/deriveethtxn/]
+        BuildETH[/buildeth/]
+        DeriveBTC[/derivebitcointxn/]
+        BuildBTC[/buildbitcointxn/]
+        SignBTC[/signbitcointxn/]
+    end
+
+    subgraph "Core Services"
+        ETH[Ethereum Service]
+        BTC[Bitcoin Service]
+        KDF[Key Derivation]
+    end
+
+    subgraph "NEAR Protocol"
+        MPC[MPC Contract<br>v1.signer-prod.testnet]
+        NEAR_WALLET[NEAR Wallet]
+    end
+
+    subgraph "External Networks"
+        MEMPOOL[Mempool.space API]
+        ETH_NET[Ethereum Network<br>Sepolia/Mainnet]
+        BTC_NET[Bitcoin Network<br>Testnet/Mainnet]
+    end
+
+    %% User Interface Interactions
+    UI --> AI
+    AI --> DeriveETH & BuildETH & DeriveBTC & BuildBTC & SignBTC
+
+    %% Ethereum Flow
+    DeriveETH --> ETH
+    BuildETH --> ETH
+    ETH --> KDF
+    ETH --> ETH_NET
+    ETH --> MPC
+
+    %% Bitcoin Flow
+    DeriveBTC --> BTC
+    BuildBTC --> BTC
+    SignBTC --> BTC
+    BTC --> KDF
+    BTC --> MEMPOOL
+    BTC --> MPC
+    MEMPOOL --> BTC_NET
+
+    %% MPC Signing Flow
+    MPC --> NEAR_WALLET
+    NEAR_WALLET --> ETH_NET
+    NEAR_WALLET --> BTC_NET
+
+    %% Styling
+    classDef interface fill:#f9f,stroke:#333,stroke-width:2px
+    classDef api fill:#ff9,stroke:#333,stroke-width:2px
+    classDef service fill:#9cf,stroke:#333,stroke-width:2px
+    classDef network fill:#fcf,stroke:#333,stroke-width:2px
+    
+    class UI,AI interface
+    class DeriveETH,BuildETH,DeriveBTC,BuildBTC,SignBTC api
+    class ETH,BTC,KDF service
+    class ETH_NET,BTC_NET,MEMPOOL network
+```
 ### Use Cases
 
 ### 1. **Cross-Chain Transaction Management**
